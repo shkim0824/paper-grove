@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta name="application-version" content="2026.09.13-highlights.3">
+<meta name="application-version" content="2026.09.13-highlights.4">
 <title>Paper Grove · 나의 논문 서재</title>
 <style>
 :root{--ink:#202124;--muted:#777b83;--green:#24262b;--line:#e8e9ec;--bg:#ffffff;--white:#fff;--yellow:#ffe173;--pink:#ff9fbe;--blue:#8dcaff;--mint:#8ee0b2;font-family:Inter,"Pretendard","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:14px}
@@ -56,7 +56,7 @@ button:disabled{cursor:default}.note-editor{padding:14px;background:white;border
       <div class="table-wrap"><table id="paperTable" hidden><colgroup><col style="width:29%"><col style="width:23%"><col style="width:16%"><col style="width:21%"><col style="width:11%"></colgroup><thead><tr><th>논문 · 인용 정보</th><th>한줄 요약</th><th>분류</th><th>BibTeX</th><th>관리</th></tr></thead><tbody id="paperRows"></tbody></table><div class="empty" id="emptyState"><div class="empty-icon">▤</div><h2>라이브러리가 비어 있습니다</h2><p>arXiv 링크를 붙여 넣거나 PDF를 업로드하세요.<br>논문을 열어 하이라이트와 메모를 남길 수 있습니다.</p><button class="primary" id="emptyUpload">＋ PDF 추가하기</button><p class="small" style="margin-top:17px;margin-bottom:0">GitHub 연결 없이도 이 브라우저에서 바로 시작할 수 있습니다.</p></div></div>
       <div class="footnote" id="libraryFootnote">PDF 원본과 메모는 이 브라우저에 저장됩니다. 여러 기기에서 이어 읽으려면 저장소 설정에서 GitHub를 연결하세요.</div>
       <div class="footnote" id="syncNotice" role="status" hidden></div>
-      <div class="footnote"><a href="guide.html" target="_blank" rel="noopener">사용 가이드 ↗</a> · <a href="PAPER_GROVE_MEMORY.md" download>GPT 작업 지침 ↓</a> · <a href="INTEGRATION_REVIEW.md" target="_blank" rel="noopener">AI 연동 검토</a> · 웹 버전 2026.09.13-highlights.3</div>
+      <div class="footnote"><a href="guide.html" target="_blank" rel="noopener">사용 가이드 ↗</a> · <a href="PAPER_GROVE_MEMORY.md" download>GPT 작업 지침 ↓</a> · <a href="INTEGRATION_REVIEW.md" target="_blank" rel="noopener">AI 연동 검토</a> · 웹 버전 2026.09.13-highlights.4</div>
     </main>
   </div>
 </div>
@@ -241,7 +241,7 @@ $('highlightOff').onclick=()=>setHighlightColor(null);
 $('undoHighlight').onclick=undoHighlight;
 $('redoHighlight').onclick=redoHighlight;
 $('closeNoteEditor').onclick=()=>{closeNoteEditor();if(state.viewer)renderNotes(state.viewer)};
-async function finishNoteEditing(e){if(e.key!=='Enter'||e.shiftKey||e.ctrlKey||e.metaKey||e.altKey||e.isComposing||e.keyCode===229)return;const v=state.viewer;if(!v?.editingNote)return;e.preventDefault();const epoch=v.noteEditorEpoch,id=v.editingNote,revision=v.revision;if(v.submittingNote===epoch)return;v.submittingNote=epoch;try{await flushNotes(v);if(state.viewer===v&&v.editingNote===id&&v.noteEditorEpoch===epoch&&v.revision===revision&&!v.dirty){closeNoteEditor();renderNotes(v);Array.from($('notesList').querySelectorAll('[data-note]')).find(b=>b.dataset.note===id)?.focus({preventScroll:true})}}catch{}finally{if(v.submittingNote===epoch)v.submittingNote=null}}
+async function finishNoteEditing(e){if(e.key!=='Enter'||e.shiftKey||e.ctrlKey||e.metaKey||e.altKey||e.isComposing||e.keyCode===229)return;const v=state.viewer;if(!v?.editingNote)return;e.preventDefault();const epoch=v.noteEditorEpoch,id=v.editingNote,revision=v.revision;if(v.submittingNote===epoch)return;v.submittingNote=epoch;try{await persistDraft(v);if(state.viewer===v&&v.editingNote===id&&v.noteEditorEpoch===epoch&&v.revision===revision){closeNoteEditor();renderNotes(v);Array.from($('notesList').querySelectorAll('[data-note]')).find(b=>b.dataset.note===id)?.focus({preventScroll:true})}flushNotes(v).catch(()=>{})}catch{saveStatus(v,'기기 백업 실패 · 저장 재시도','status-error');toast('메모를 기기에 보관하지 못했습니다. 편집창을 유지합니다. 저장 재시도를 눌러 주세요.')}finally{if(v.submittingNote===epoch)v.submittingNote=null}}
 $('noteText').addEventListener('keydown',finishNoteEditing);
 $('noteText').addEventListener('input',()=>{const v=state.viewer,h=v?.notes.highlights.find(h=>h.id===v.editingNote);if(h){h.note=$('noteText').value;changed(v)}});
 $('deleteNote').onclick=async()=>{const v=state.viewer,id=v?.editingNote;if(!id)return;if(!await confirmAction('하이라이트를 삭제할까요?','선택한 문장의 표시와 메모를 삭제합니다.'))return;removeHighlight(v,id)};
