@@ -66,3 +66,15 @@
 
 배포 파일: `index.html`, `guide.html`, `README.md`, `PAPER_GROVE_MEMORY.md`, `INTEGRATION_REVIEW.md`, `.nojekyll`.
 공개 저장소에 토큰이나 데이터 저장소 파일을 올리지 마세요.
+
+
+## 2026.09.12 — 폴더 분류와 인용 확인
+
+빠른 사용법: [guide.html](guide.html).
+
+- 기존 `tags` 배열을 폴더 경로로 사용합니다. 별도의 folders 데이터베이스나 PDF 이동이 없습니다. 예: `["Agent/Orchestration", "Reading/Favorites"]`.
+- 상위 경로를 자동 생성해 표시하며, 상위 폴더 필터는 모든 하위 문헌을 포함합니다. 편집에서 기존 분류를 검색·다중 선택할 수 있습니다. 대소문자 차이는 같은 분류로 처리합니다.
+- 기존 arXiv 분야 태그는 최상위 분류로 유지합니다. 비어 있는 폴더를 따로 저장하지는 않습니다.
+- Scholar → 인용 → BibTeX 복사 → 편집에서 붙여넣기 → 저장. 붙여넣기는 제목·저자·출판처·연도 입력칸을 자동 갱신하지 않습니다.
+- 직접 확인 체크를 저장하면 `citationStatus: "user_verified"`, `citationSource: "사용자 직접 확인"`, `citationCheckedAt`을 기록합니다. 자동 검증 상태와 구분합니다. 인용 필드를 바꾸면 UI 확인 체크가 풀립니다.
+- 기존 자동/외부 검증 상태 `verified`는 분류만 수정할 때 유지됩니다. 미확인 arXiv는 `preprint`로 남습니다.
