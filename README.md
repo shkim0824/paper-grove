@@ -49,3 +49,20 @@
 세부 사용법, 토큰 갱신, 오류 해결은 [웹 사용 가이드](https://shkim0824.github.io/paper-grove/guide.html)에 정리했습니다.
 
 공식 참고: [GitHub Pages 배포 설정](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site), [GitHub Contents API](https://docs.github.com/en/rest/repos/contents), [토큰 관리](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+
+
+## 2026.09.12 — arXiv 가져오기와 화면 개편
+
+- 흰색·차콜 중심의 간결한 UI로 변경했습니다.
+- **＋ arXiv 링크**에서 abs/pdf 링크, ID, 버전을 지원합니다. 제목·전체 저자·PDF·arXiv BibTeX가 자동 저장됩니다.
+- 데이터 저장소의 `.github/workflows/import-arxiv.yml`와 `scripts/import_arxiv.py`가 처리합니다. 현재 데이터 저장소에는 설치되어 있습니다.
+- 새 fine-grained PAT에는 데이터 저장소의 **Contents: Read and write + Actions: Read and write** 권한을 지정하세요.
+- Actions는 계정의 사용 한도를 사용합니다. 실패/대기 상태는 앱의 실행 내역에서 확인하세요.
+- `imports/<request_id>.json`은 진행 보고서이며 `imports/<request_id>-paper.json`은 버전을 고정한 복구 정보입니다. 중간에 실패하면 앱에서 같은 요청으로 다시 시도할 수 있습니다.
+- 자동 인용은 arXiv 프리프린트 기준입니다. 정식 출판 정보는 논문별 Scholar 링크와 공식 출판 기록으로 대조하세요.
+- [PAPER_GROVE_MEMORY.md](PAPER_GROVE_MEMORY.md): 새 GPT 세션에 첨부할 지침. 검색과 인증된 쓰기 도구가 있어야 실제 자동 등록까지 가능합니다.
+- [INTEGRATION_REVIEW.md](INTEGRATION_REVIEW.md): Scholar 자동화 및 ChatGPT 연동 검토. 현재 유료 AI 연결은 설치하지 않았습니다.
+- 앱 업데이트는 브라우저 새로고침으로 받습니다. 저장소의 PDF와 하이라이트 형식은 그대로 호환됩니다.
+
+배포 파일: `index.html`, `guide.html`, `README.md`, `PAPER_GROVE_MEMORY.md`, `INTEGRATION_REVIEW.md`, `.nojekyll`.
+공개 저장소에 토큰이나 데이터 저장소 파일을 올리지 마세요.
